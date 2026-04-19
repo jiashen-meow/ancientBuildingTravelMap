@@ -3,657 +3,332 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>晋冀豫古建旅行地图 · 五一</title>
+<title>晋冀豫古建旅行地图</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@300;400;500&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --ink: #1a1612;
-    --ink2: #4a4540;
-    --ink3: #8a8480;
-    --paper: #f7f3ee;
-    --paper2: #efe9e0;
-    --paper3: #e5ddd0;
-    --red: #c0392b;
-    --red-light: #fdecea;
-    --gold: #b8860b;
-    --gold-light: #fdf5e0;
-    --blue: #1a5a8a;
-    --blue-light: #e8f2fa;
-    --green: #2d6a4f;
-    --green-light: #e8f5ee;
-    --amber: #a0522d;
-    --amber-light: #fdf0e8;
-    --purple: #5b4a8a;
-    --purple-light: #f0eefa;
-    --gray: #5f5a55;
-    --gray-light: #f0ede8;
-    --teal: #1a7a6a;
-    --teal-light: #e6f5f2;
-    --accent: #c0392b;
-    --shadow: rgba(26,22,18,0.12);
-  }
-
-  html, body { height: 100%; overflow: hidden; }
-
-  body {
-    font-family: 'Noto Sans SC', sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ── Header ── */
-  #header {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 0 20px;
-    height: 54px;
-    background: var(--ink);
-    flex-shrink: 0;
-    border-bottom: 2px solid var(--red);
-  }
-  #header h1 {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--paper);
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-  }
-  #header .subtitle {
-    font-size: 12px;
-    color: var(--ink3);
-    letter-spacing: 0.05em;
-  }
-
-  /* ── Toolbar ── */
-  #toolbar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    background: var(--paper2);
-    border-bottom: 0.5px solid var(--paper3);
-    flex-shrink: 0;
-    flex-wrap: wrap;
-  }
-  .day-btn {
-    padding: 5px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--paper3);
-    background: var(--paper);
-    color: var(--ink2);
-    font-size: 12px;
-    font-family: 'Noto Sans SC', sans-serif;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .day-btn:hover { background: var(--paper3); }
-  .day-btn.active {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
-
-  #search-wrap {
-    margin-left: auto;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-  #search-wrap label {
-    font-size: 12px;
-    color: var(--ink3);
-    white-space: nowrap;
-  }
-  #poi-search {
-    width: 190px;
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--paper3);
-    background: var(--paper);
-    color: var(--ink);
-    font-size: 13px;
-    font-family: 'Noto Sans SC', sans-serif;
-    outline: none;
-  }
-  #poi-search:focus { border-color: var(--ink2); }
-  #search-btn {
-    padding: 5px 14px;
-    border-radius: 20px;
-    border: 1px solid var(--ink);
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 12px;
-    font-family: 'Noto Sans SC', sans-serif;
-    cursor: pointer;
-  }
-  #search-btn:hover { background: var(--ink2); }
-
-  /* ── Legend ── */
-  #legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 16px;
-    padding: 7px 16px;
-    background: var(--paper);
-    border-bottom: 0.5px solid var(--paper3);
-    flex-shrink: 0;
-    align-items: center;
-  }
-  .legend-group { display: flex; gap: 8px; align-items: center; }
-  .legend-title { font-size: 11px; color: var(--ink3); }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 11px;
-    font-weight: 500;
-    border: 0.5px solid transparent;
-  }
-  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-
-  /* ── Main layout ── */
-  #main { display: flex; flex: 1; overflow: hidden; }
-  #map { flex: 1; }
-
-  /* ── Side panel ── */
-  #panel {
-    width: 290px;
-    flex-shrink: 0;
-    background: var(--paper);
-    border-left: 0.5px solid var(--paper3);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: width 0.2s;
-  }
-  #panel.hidden { width: 0; border: none; }
-
-  #panel-header {
-    padding: 14px 16px 12px;
-    border-bottom: 0.5px solid var(--paper3);
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    background: var(--paper2);
-    flex-shrink: 0;
-  }
-  #panel-name {
-    font-family: 'Noto Serif SC', serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.3;
-  }
-  #close-panel {
-    cursor: pointer;
-    color: var(--ink3);
-    font-size: 20px;
-    line-height: 1;
-    padding: 0 2px;
-    flex-shrink: 0;
-  }
-  #close-panel:hover { color: var(--ink); }
-
-  #panel-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 14px 16px;
-    scrollbar-width: thin;
-  }
-
-  .info-section { margin-bottom: 14px; }
-  .info-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 7px;
-    align-items: flex-start;
-    font-size: 13px;
-  }
-  .info-label {
-    color: var(--ink3);
-    white-space: nowrap;
-    min-width: 44px;
-    font-size: 12px;
-    padding-top: 1px;
-  }
-  .info-val { color: var(--ink); line-height: 1.5; }
-
-  .feature-box {
-    background: var(--paper2);
-    border-left: 3px solid var(--red);
-    padding: 10px 12px;
-    border-radius: 0 6px 6px 0;
-    font-size: 13px;
-    color: var(--ink);
-    line-height: 1.7;
-    margin-top: 12px;
-  }
-  .note-box {
-    margin-top: 8px;
-    background: var(--blue-light);
-    border-radius: 6px;
-    padding: 7px 12px;
-    font-size: 12px;
-    color: var(--blue);
-    line-height: 1.5;
-  }
-  .nav-btn {
-    margin-top: 14px;
-    width: 100%;
-    padding: 9px;
-    border-radius: 6px;
-    border: none;
-    background: var(--ink);
-    color: var(--paper);
-    font-size: 13px;
-    font-family: 'Noto Sans SC', sans-serif;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: background 0.15s;
-  }
-  .nav-btn:hover { background: var(--red); }
-
-  /* ── Empty state ── */
-  #empty-state {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--ink3);
-    font-size: 13px;
-    line-height: 2;
-    text-align: center;
-    padding: 20px;
-  }
-  #empty-state .big { font-size: 32px; margin-bottom: 8px; }
-
-  /* ── List panel (site list) ── */
-  #list-panel {
-    position: absolute;
-    top: 0; bottom: 0; right: 290px;
-    width: 240px;
-    background: var(--paper);
-    border-left: 0.5px solid var(--paper3);
-    display: none;
-    flex-direction: column;
-    z-index: 10;
-    box-shadow: -4px 0 12px var(--shadow);
-  }
-  #list-panel.open { display: flex; }
-  #list-header {
-    padding: 12px 14px;
-    border-bottom: 0.5px solid var(--paper3);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--ink);
-    background: var(--paper2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  #list-body { overflow-y: auto; flex: 1; }
-  .list-item {
-    padding: 10px 14px;
-    border-bottom: 0.5px solid var(--paper3);
-    cursor: pointer;
-    transition: background 0.1s;
-  }
-  .list-item:hover { background: var(--paper2); }
-  .list-item-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
-  .list-item-sub { font-size: 11px; color: var(--ink3); }
-
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--paper3); border-radius: 2px; }
-
-  /* ── Stats bar ── */
-  #stats {
-    padding: 5px 16px;
-    font-size: 11px;
-    color: var(--ink3);
-    background: var(--paper2);
-    border-bottom: 0.5px solid var(--paper3);
-    flex-shrink: 0;
-    display: flex;
-    gap: 16px;
-    align-items: center;
-  }
-  #stats span b { color: var(--ink2); font-weight: 500; }
-
-  /* Toggle list btn */
-  #toggle-list-btn {
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--paper3);
-    background: var(--paper);
-    color: var(--ink2);
-    font-size: 12px;
-    cursor: pointer;
-    font-family: 'Noto Sans SC', sans-serif;
-  }
-  #toggle-list-btn:hover { background: var(--paper3); }
-  #toggle-list-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans SC",sans-serif;display:flex;flex-direction:column;height:100vh;overflow:hidden;background:#f7f3ee;color:#1a1612}
+#hd{height:50px;background:#1a1612;display:flex;align-items:center;gap:16px;padding:0 18px;flex-shrink:0;border-bottom:2px solid #c0392b}
+#hd h1{font-size:17px;color:#f7f3ee;letter-spacing:.08em;white-space:nowrap}
+#hd small{font-size:12px;color:#8a8480}
+#tb{display:flex;flex-wrap:wrap;gap:6px;padding:9px 14px;background:#efe9e0;border-bottom:.5px solid #e5ddd0;flex-shrink:0;align-items:center}
+.db{padding:4px 12px;border-radius:20px;border:1px solid #d5cfc8;background:#f7f3ee;color:#4a4540;font-size:12px;cursor:pointer}
+.db:hover{background:#e5ddd0}
+.db.on{background:#1a1612;color:#f7f3ee;border-color:#1a1612}
+#sw{margin-left:auto;display:flex;gap:6px;align-items:center}
+#sw label{font-size:12px;color:#8a8480;white-space:nowrap}
+#pi{width:180px;padding:4px 12px;border-radius:20px;border:1px solid #d5cfc8;background:#f7f3ee;color:#1a1612;font-size:13px;outline:none}
+#sb{padding:4px 12px;border-radius:20px;border:1px solid #1a1612;background:#1a1612;color:#f7f3ee;font-size:12px;cursor:pointer}
+#lg{display:flex;flex-wrap:wrap;gap:8px 14px;padding:6px 14px;background:#f7f3ee;border-bottom:.5px solid #e5ddd0;flex-shrink:0;align-items:center;font-size:11px;color:#8a8480}
+.bx{display:inline-block;padding:1px 7px;border-radius:8px;font-size:11px;font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
+#st{padding:5px 14px;background:#efe9e0;border-bottom:.5px solid #e5ddd0;font-size:11px;color:#8a8480;flex-shrink:0}
+#st b{color:#4a4540;font-weight:500}
+#mn{display:flex;flex:1;overflow:hidden}
+#map{flex:1}
+#pn{width:280px;flex-shrink:0;background:#f7f3ee;border-left:.5px solid #e5ddd0;display:flex;flex-direction:column;overflow:hidden}
+#ph{padding:13px 15px 10px;border-bottom:.5px solid #e5ddd0;background:#efe9e0;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0}
+#pname{font-size:18px;font-weight:600;color:#1a1612;line-height:1.3}
+#px{cursor:pointer;color:#8a8480;font-size:20px;line-height:1;flex-shrink:0}
+#pb{flex:1;overflow-y:auto;padding:13px 15px}
+.ir{display:flex;gap:8px;margin-bottom:7px;font-size:13px;align-items:flex-start}
+.il{color:#8a8480;white-space:nowrap;min-width:44px;font-size:12px;padding-top:1px}
+.iv{color:#1a1612;line-height:1.5}
+.fb{background:#efe9e0;border-left:3px solid #c0392b;padding:9px 11px;border-radius:0 5px 5px 0;font-size:13px;color:#1a1612;line-height:1.7;margin-top:11px}
+.nb{margin-top:7px;background:#e8f2fa;border-radius:5px;padding:6px 11px;font-size:12px;color:#1a5a8a;line-height:1.5}
+.nb2{margin-top:5px;background:#e8f5ee;border-radius:5px;padding:6px 11px;font-size:12px;color:#2d6a4f;line-height:1.5}
+.navb{margin-top:12px;width:100%;padding:8px;border-radius:5px;border:none;background:#1a1612;color:#f7f3ee;font-size:13px;cursor:pointer;font-family:inherit}
+.navb:hover{background:#c0392b}
+.navb2{margin-top:7px;width:100%;padding:8px;border-radius:5px;border:1px solid #d5cfc8;background:#efe9e0;color:#1a1612;font-size:13px;cursor:pointer;font-family:inherit}
+#es{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#8a8480;font-size:13px;text-align:center;line-height:2.2;gap:4px}
+#es .bi{font-size:36px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:#d5cfc8;border-radius:2px}
 </style>
 </head>
 <body>
 
-<div id="header">
+<div id="hd">
   <h1>晋冀豫古建旅行地图</h1>
-  <span class="subtitle">长治 · 晋城 · 邯郸 · 安阳 · 五一行程</span>
+  <small>长治 · 晋城 · 邯郸 · 安阳 · 五一行程</small>
 </div>
 
-<div id="toolbar">
-  <button class="day-btn active" data-day="all" onclick="filterDay('all',this)">全部</button>
-  <button class="day-btn" data-day="1" onclick="filterDay(1,this)">Day 1 长治</button>
-  <button class="day-btn" data-day="2" onclick="filterDay(2,this)">Day 2 长治→晋城</button>
-  <button class="day-btn" data-day="3" onclick="filterDay(3,this)">Day 3 晋城</button>
-  <button class="day-btn" data-day="4" onclick="filterDay(4,this)">Day 4 晋城→邯郸</button>
-  <button class="day-btn" data-day="5" onclick="filterDay(5,this)">Day 5 邯郸→安阳</button>
-  <button class="day-btn" data-day="6" onclick="filterDay(6,this)">Day 6 安阳</button>
-  <button id="toggle-list-btn" onclick="toggleList()">列表</button>
-  <div id="search-wrap">
+<div id="tb">
+  <button class="db on" onclick="window.filterDay('all',this)">全部</button>
+  <button class="db" onclick="window.filterDay(1,this)">Day 1 长治</button>
+  <button class="db" onclick="window.filterDay(2,this)">Day 2 长治→晋城</button>
+  <button class="db" onclick="window.filterDay(3,this)">Day 3 晋城</button>
+  <button class="db" onclick="window.filterDay(4,this)">Day 4 晋城→邯郸</button>
+  <button class="db" onclick="window.filterDay(5,this)">Day 5 邯郸→安阳</button>
+  <button class="db" onclick="window.filterDay(6,this)">Day 6 安阳</button>
+  <div id="sw">
     <label>朋友找吃的：</label>
-    <input id="poi-search" type="text" placeholder="输入餐馆名称搜索…" onkeydown="if(event.key==='Enter')searchPOI()" />
-    <button id="search-btn" onclick="searchPOI()">定位</button>
+    <input id="pi" type="text" placeholder="输入餐馆名称…" onkeydown="if(event.key==='Enter')window.searchPOI()">
+    <button id="sb" onclick="window.searchPOI()">定位</button>
   </div>
 </div>
 
-<div id="legend">
-  <span class="legend-title">朝代</span>
-  <span class="badge" style="background:#fdecea;color:#9a2a1e;border-color:#f0c0bb;">唐</span>
-  <span class="badge" style="background:#fdf5e0;color:#8a6000;border-color:#e8d090;">五代</span>
-  <span class="badge" style="background:#e8f2fa;color:#1a5a8a;border-color:#b0cfe8;">宋</span>
-  <span class="badge" style="background:#e8f5ee;color:#2d6a4f;border-color:#a0d8b8;">金</span>
-  <span class="badge" style="background:#f0eefa;color:#5b4a8a;border-color:#c8b8e8;">元</span>
-  <span class="badge" style="background:#f0ede8;color:#5f5a55;border-color:#d0ccc8;">明</span>
-  <span class="badge" style="background:#fbeaf0;color:#8a3058;border-color:#e8b0c8;">北朝/商</span>
-  <span class="badge" style="background:#e6f5f2;color:#1a7a6a;border-color:#90d0c8;">自然</span>
-  <span style="margin-left:8px;" class="legend-title">人流</span>
-  <span style="font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px;"><span class="dot" style="background:#c0392b;"></span>人多</span>
-  <span style="font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px;"><span class="dot" style="background:#e67e22;"></span>一般</span>
-  <span style="font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px;"><span class="dot" style="background:#27ae60;"></span>清净</span>
+<div id="lg">
+  <span>朝代：</span>
+  <span class="bx" style="background:#fdecea;color:#9a2a1e">唐</span>
+  <span class="bx" style="background:#fdf5e0;color:#8a6000">五代</span>
+  <span class="bx" style="background:#e8f2fa;color:#1a5a8a">宋</span>
+  <span class="bx" style="background:#e8f5ee;color:#2d6a4f">金</span>
+  <span class="bx" style="background:#f0eefa;color:#5b4a8a">元</span>
+  <span class="bx" style="background:#f0ede8;color:#5f5a55">明</span>
+  <span class="bx" style="background:#fbeaf0;color:#8a3058">北朝/商</span>
+  <span class="bx" style="background:#e6f5f2;color:#1a7a6a">自然</span>
+  <span style="margin-left:6px">人流：</span>
+  <span><span class="dot" style="background:#c0392b"></span>人多</span>
+  <span><span class="dot" style="background:#e67e22"></span>一般</span>
+  <span><span class="dot" style="background:#27ae60"></span>清净</span>
+  <span style="margin-left:6px;color:#c0392b;font-weight:500">⚡ = 必看</span>
 </div>
 
-<div id="stats">
-  <span>当前显示 <b id="stat-count">23</b> 处</span>
-  <span>唐代木构 <b>3</b> 处</span>
-  <span>一批国保 <b>3</b> 处</span>
-  <span>⚡必看 <b>4</b> 处</span>
-</div>
+<div id="st">显示 <b id="sc">26</b> 处景点 &nbsp;|&nbsp; 唐代木构 <b>3</b> 处 &nbsp;|&nbsp; 一批国保 <b>3</b> 处 &nbsp;|&nbsp; ⚡必看 <b>5</b> 处</div>
 
-<div id="main">
+<div id="mn">
   <div id="map"></div>
-
-  <div id="list-panel">
-    <div id="list-header">
-      <span id="list-title">全部景点（23）</span>
-      <span style="cursor:pointer;color:var(--ink3);" onclick="toggleList()">×</span>
-    </div>
-    <div id="list-body"></div>
-  </div>
-
-  <div id="panel">
-    <div id="panel-header">
+  <div id="pn">
+    <div id="ph">
       <div>
-        <div id="panel-name">点击地图标记</div>
-        <div id="panel-dynasty" style="margin-top:4px;"></div>
+        <div id="pname">点击地图标记</div>
+        <div id="pdyn" style="margin-top:5px"></div>
       </div>
-      <span id="close-panel" onclick="closePanel()">×</span>
+      <span id="px" onclick="window.closePanel()">&#x2715;</span>
     </div>
-    <div id="panel-body">
-      <div id="empty-state">
-        <div class="big">🗺</div>
+    <div id="pb">
+      <div id="es">
+        <div class="bi">🗺️</div>
         <div>点击地图上的标记</div>
-        <div>查看景点详细信息</div>
+        <div>查看景点详情</div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-const DYNASTY_COLORS = {
-  '唐':    { bg:'#fdecea', text:'#9a2a1e', marker:'#c0392b' },
-  '五代':  { bg:'#fdf5e0', text:'#8a6000', marker:'#d4a017' },
-  '宋':    { bg:'#e8f2fa', text:'#1a5a8a', marker:'#2980b9' },
-  '金':    { bg:'#e8f5ee', text:'#2d6a4f', marker:'#27ae60' },
-  '元':    { bg:'#f0eefa', text:'#5b4a8a', marker:'#8e44ad' },
-  '明':    { bg:'#f0ede8', text:'#5f5a55', marker:'#7f8c8d' },
-  '北朝':  { bg:'#fbeaf0', text:'#8a3058', marker:'#d63084' },
-  '商':    { bg:'#fbeaf0', text:'#8a3058', marker:'#c0392b' },
-  '近现代':{ bg:'#f0ede8', text:'#5f5a55', marker:'#95a5a6' },
-  '自然':  { bg:'#e6f5f2', text:'#1a7a6a', marker:'#1abc9c' },
+var DCOL = {
+  "tang":  {bg:"#fdecea",tx:"#9a2a1e",mk:"#c0392b"},
+  "wudai":{bg:"#fdf5e0",tx:"#8a6000", mk:"#d4a017"},
+  "song": {bg:"#e8f2fa",tx:"#1a5a8a", mk:"#2980b9"},
+  "jin":  {bg:"#e8f5ee",tx:"#2d6a4f", mk:"#27ae60"},
+  "yuan": {bg:"#f0eefa",tx:"#5b4a8a", mk:"#8e44ad"},
+  "ming": {bg:"#f0ede8",tx:"#5f5a55", mk:"#7f8c8d"},
+  "bei":  {bg:"#fbeaf0",tx:"#8a3058", mk:"#d63084"},
+  "shang":{bg:"#fbeaf0",tx:"#8a3058", mk:"#c0392b"},
+  "jin2": {bg:"#f0ede8",tx:"#5f5a55", mk:"#95a5a6"},
+  "nat":  {bg:"#e6f5f2",tx:"#1a7a6a", mk:"#1abc9c"}
 };
 
-const SITES = [
-  { id:1,  day:1, name:"天台庵",       dynasty:"唐",    era:"唐末（约公元9世纪）",         batch:"第一批（1961）", heat:"low",  lat:36.2261, lng:113.6089, must:true,  feature:"现存四座唐代木构之一，殿内梁架保存完整，斗拱雄健，结构古朴。虽经历部分修缮争议，仍是中国木构建筑史上的稀世孤品。", note:"⚡ 全国唐代木构仅四座，此为晋东南孤品" },
-  { id:2,  day:1, name:"龙门寺",       dynasty:"五代",  era:"五代至元（934年始建）",        batch:"第三批（1988）", heat:"low",  lat:36.3012, lng:113.6478, must:false, feature:"同一寺院内保存有五代、宋、金、元四个朝代的木构建筑，是中国保存多朝代木构最为集中的寺院之一，建筑史教科书级别。", note:"一院四朝代，举国罕见" },
-  { id:3,  day:1, name:"大云院",       dynasty:"五代",  era:"五代后汉（940年）",            batch:"第三批（1988）", heat:"low",  lat:36.2756, lng:113.5832, must:false, feature:"五代木构大殿，殿内存有极为珍贵的五代壁画，内容涉及佛教故事，全国五代壁画存世极稀。", note:"五代壁画，全国仅此一处可见" },
-  { id:4,  day:1, name:"原起寺",       dynasty:"唐",    era:"唐代塔+宋代殿",               batch:"第五批（1996）", heat:"low",  lat:36.3389, lng:113.2011, must:false, feature:"唐代青龙宝塔造型秀丽，与宋代大雄宝殿并存于一院，唐宋组合少见。", note:"唐塔宋殿组合" },
-  { id:5,  day:1, name:"崇庆寺",       dynasty:"宋",    era:"宋（1030年）",                 batch:"第四批（1996）", heat:"low",  lat:36.0578, lng:112.9734, must:false, feature:"宋代彩塑保存极佳，罗汉、菩萨造像神态生动传神，面部表情层次丰富，是宋代彩塑艺术的代表之作。", note:"宋代彩塑精华，人物神态绝佳" },
-  { id:6,  day:1, name:"法兴寺",       dynasty:"唐",    era:"唐代燃灯塔+宋代殿",           batch:"第三批（1988）", heat:"low",  lat:36.0412, lng:112.9556, must:false, feature:"唐代燃灯石塔造型独特全国罕见，宋代圆觉殿彩塑同样精彩，寺内环境清幽。", note:"燃灯石塔造型全国唯一" },
-  { id:7,  day:2, name:"正觉寺",       dynasty:"宋",    era:"宋金（11-12世纪）",            batch:"第五批（1996）", heat:"low",  lat:36.1089, lng:113.1234, must:false, feature:"宋金木构，大殿布局完整，距长治市区较近，是进入晋城途中的顺路佳选。", note:"顺路可访，交通便利" },
-  { id:8,  day:2, name:"开化寺",       dynasty:"宋",    era:"宋（壁画1073年）",             batch:"第三批（1988）", heat:"low",  lat:35.8123, lng:112.9234, must:true,  feature:"大雄宝殿内存北宋叙事壁画，内容包含建筑、人物、场景，信息量极大，是研究北宋社会生活的第一手图像资料，全国独一无二。", note:"⚡ 宋代叙事壁画孤品，美术史必看" },
-  { id:9,  day:2, name:"游仙寺",       dynasty:"五代",  era:"五代后汉（943年）",            batch:"第五批（1996）", heat:"low",  lat:35.7856, lng:112.9012, must:false, feature:"五代毗卢殿保存完好，斗拱雄健有力，高平古建群重要组成，与开化寺相距不远。", note:"高平古建群，可与开化寺连游" },
-  { id:10, day:2, name:"资圣寺",       dynasty:"宋",    era:"宋金",                         batch:"第六批（2006）", heat:"low",  lat:35.7634, lng:112.8890, must:false, feature:"宋金木构，高平古建密集区重要一员，可与游仙寺合并参观。", note:"高平古建连游" },
-  { id:11, day:3, name:"青莲寺",       dynasty:"唐",    era:"隋创建，唐宋木构",             batch:"第三批（1988）", heat:"mid",  lat:35.4523, lng:112.8901, must:false, feature:"古青莲寺存唐代遗构与唐碑，新青莲寺为宋代建筑，山水环境极佳，寺院临丹河峭壁而建，风景秀美。", note:"有唐碑，山水环境绝佳" },
-  { id:12, day:3, name:"玉皇庙（府城）",dynasty:"宋",   era:"宋金元（11-14世纪）",          batch:"第三批（1988）", heat:"low",  lat:35.5012, lng:112.8567, must:true,  feature:"元代二十八宿彩塑是镇庙之宝，二十八位神祇各具面貌、服饰、神器，造型奇绝生动，全国现存唯一完整二十八宿群像，不可错过。", note:"⚡ 元代二十八宿彩塑，举国孤品" },
-  { id:13, day:3, name:"冶底岱庙",     dynasty:"宋",    era:"北宋天仙圣母殿",              batch:"第五批（1996）", heat:"low",  lat:35.3890, lng:112.7234, must:false, feature:"宋代天仙圣母殿保存完整，建筑精巧，地处山野，游客极少，是难得的清净之地。", note:"游客极少，清净幽深" },
-  { id:14, day:4, name:"郭峪古城",     dynasty:"明",    era:"明代（17世纪）",               batch:"第五批（1996）", heat:"mid",  lat:35.3156, lng:112.4523, must:false, feature:"明代城堡式村落，城墙完整，豫楼高耸，为活态聚落而非单体建筑，居民至今仍居其中，是了解明代北方乡绅社会的活化石。", note:"完整明代城堡聚落，活态村落" },
-  { id:15, day:4, name:"湘峪古堡",     dynasty:"明",    era:"明崇祯年间（约1630年）",       batch:"第七批（2013）", heat:"mid",  lat:35.4234, lng:112.3890, must:false, feature:"三面环水、一面靠山，城堡格局险要壮观，被誉为"中国北方最美古堡"，山水相映，建筑与自然融为一体。", note:"山水城堡，格局险峻壮美" },
-  { id:16, day:4, name:"窦庄古堡",     dynasty:"明",    era:"明代",                         batch:"第七批（2013）", heat:"low",  lat:35.4567, lng:112.3234, must:false, feature:"明代城堡式村落，与湘峪同类型，规模略小但保存完整，游客更少，可与湘峪连游。", note:"可与湘峪合并，游客少" },
-  { id:17, day:4, name:"小会岭二仙庙", dynasty:"金",    era:"金代（12世纪）",               batch:"第五批（1996）", heat:"low",  lat:35.6234, lng:112.6890, must:false, feature:"金代木构，梁架精美规整，地处陵川山间，道路蜿蜒，游客极少，是难得的金代遗构原生状态体验。", note:"金构精品，山间幽径，人迹罕至" },
-  { id:18, day:5, name:"响堂山石窟",   dynasty:"北朝",  era:"北齐（550-577年）",            batch:"第一批（1961）", heat:"mid",  lat:36.5034, lng:114.2890, must:false, feature:"北齐皇家石窟，分南北两处，造像风格圆润秀美，与北魏石窟风格迥异，是北齐佛教艺术的代表，含多个精美洞窟。", note:"北齐石窟代表，一批国保" },
-  { id:19, day:5, name:"娲皇宫",       dynasty:"北朝",  era:"北齐（550年始建）",            batch:"第五批（1996）", heat:"mid",  lat:36.8923, lng:113.7234, must:false, feature:"建筑群依山崖凌空而建，北齐摩崖刻经字迹清晰，四座楼阁贴壁悬挂于绝壁之上，视觉极为震撼，是中国现存最早的女娲祭祀场所。", note:"悬崖建筑群+摩崖刻经，视觉震撼" },
-  { id:20, day:5, name:"修定寺塔",     dynasty:"唐",    era:"唐代（8世纪）",                batch:"第三批（1988）", heat:"low",  lat:36.1234, lng:114.0567, must:true,  feature:"塔身全部以精美砖雕贴面，题材包含飞天、力士、佛像、花卉，构图繁复华美，全国唯一此类唐代砖雕塔，被誉为"中国最美唐塔"。", note:"⚡ 砖雕唐塔孤品，举国无二" },
-  { id:21, day:5, name:"红旗渠",       dynasty:"近现代",era:"1960年代",                     batch:"近现代文保",     heat:"hot",  lat:36.0890, lng:113.8234, must:false, feature:"太行绝壁上凿出的人工天河，全长1500公里，工程奇迹与人文精神并重，山水景观壮观，五一人流较多建议早去。", note:"五一人多，建议早到" },
-  { id:22, day:6, name:"殷墟",         dynasty:"商",    era:"商代（约公元前14-11世纪）",    batch:"第一批（1961）", heat:"hot",  lat:36.1245, lng:114.3223, must:true,  feature:"中国最早有文字记载的王都遗址，出土甲骨文，世界文化遗产，2023年新馆开放，展陈精彩。建议预约，留足3小时。", note:"⚡ 必去，五一须提前预约，留足3小时" },
-  { id:23, day:6, name:"天宁寺塔（文峰塔）",dynasty:"五代",era:"五代后周（952年）",         batch:"第三批（1988）", heat:"mid",  lat:36.0978, lng:114.3456, must:false, feature:"上大下小的倒梯形罕见塔型，五代砖塔，风格独特，位于安阳市区，参观殷墟后顺路可访。", note:"倒梯形奇特造型，市区内顺路" },
-  { id:101,day:1, name:"浊漳河谷",     dynasty:"自然",  era:"—",                           batch:"—",             heat:"low",  lat:36.2500, lng:113.5800, must:false, feature:"太行水乡，峡谷风光秀丽，平顺古建群沿浊漳河分布，驾车穿越河谷即是绝佳风景。", note:"Day 1 沿途风景，无需绕路" },
-  { id:102,day:4, name:"王莽岭",       dynasty:"自然",  era:"—",                           batch:"—",             heat:"hot",  lat:35.6012, lng:113.2234, must:false, feature:"太行绝顶，视野开阔，云海壮观，秋季红叶最佳，五一人极多，建议清晨或傍晚前往。", note:"五一人极多，酌情考虑" },
-  { id:103,day:5, name:"太行大峡谷",   dynasty:"自然",  era:"—",                           batch:"—",             heat:"hot",  lat:36.0234, lng:113.6890, must:false, feature:"太行山最壮观峡谷段，红岩碧水，气势磅礴，与红旗渠相邻，可合并游览。", note:"可与红旗渠合并，五一人多" },
+var SITES = [
+  {id:1, day:1,name:"天台庵",      dk:"tang",  dy:"唐",   era:"唐末（约公元9世纪）",       batch:"第一批（1961）",heat:"low", lat:36.2261,lng:113.6089,must:1,
+   feat:"现存四座唐代木构之一，殿内梁架保存完整，斗拱雄健，结构古朴。是中国木构建筑史上的稀世孤品。",
+   note:"全国唐代木构仅四座，晋东南孤品"},
+
+  {id:2, day:1,name:"龙门寺",      dk:"wudai", dy:"五代", era:"五代至元（934年始建）",      batch:"第三批（1988）",heat:"low", lat:36.3012,lng:113.6478,must:0,
+   feat:"同一寺院内保存有五代、宋、金、元四个朝代的木构建筑，是中国保存多朝代木构最集中的寺院之一。",
+   note:"一院四朝代，举国罕见"},
+
+  {id:3, day:1,name:"大云院",      dk:"wudai", dy:"五代", era:"五代后汉（940年）",          batch:"第三批（1988）",heat:"low", lat:36.2756,lng:113.5832,must:0,
+   feat:"五代木构大殿，殿内存有极珍贵的五代壁画，全国五代壁画存世极稀。",
+   note:"五代壁画，全国仅此一处可见"},
+
+  {id:4, day:1,name:"原起寺",      dk:"tang",  dy:"唐",   era:"唐代塔 + 宋代殿",           batch:"第五批（1996）",heat:"low", lat:36.3389,lng:113.2011,must:0,
+   feat:"唐代青龙宝塔造型秀丽，与宋代大雄宝殿并存于一院，唐宋组合少见。",
+   note:"唐塔宋殿组合"},
+
+  {id:5, day:1,name:"崇庆寺",      dk:"song",  dy:"宋",   era:"宋（1030年）",               batch:"第四批（1996）",heat:"low", lat:36.0578,lng:112.9734,must:0,
+   feat:"宋代彩塑保存极佳，罗汉菩萨造像神态生动，面部表情层次丰富，是宋代彩塑艺术的代表之作。",
+   note:"宋代彩塑精华"},
+
+  {id:6, day:1,name:"法兴寺",      dk:"tang",  dy:"唐",   era:"唐代燃灯塔 + 宋代殿",       batch:"第三批（1988）",heat:"low", lat:36.0412,lng:112.9556,must:0,
+   feat:"唐代燃灯石塔造型全国罕见，宋代圆觉殿彩塑同样精彩，寺内环境清幽。",
+   note:"燃灯石塔造型全国唯一"},
+
+  {id:7, day:2,name:"正觉寺",      dk:"song",  dy:"宋",   era:"宋金（11-12世纪）",          batch:"第五批（1996）",heat:"low", lat:36.1089,lng:113.1234,must:0,
+   feat:"宋金木构，大殿布局完整，距长治市区较近，进入晋城途中顺路佳选。",
+   note:"顺路可访"},
+
+  {id:8, day:2,name:"开化寺",      dk:"song",  dy:"宋",   era:"宋（壁画1073年）",           batch:"第三批（1988）",heat:"low", lat:35.8123,lng:112.9234,must:1,
+   feat:"大雄宝殿内存北宋叙事壁画，内容涵盖建筑人物场景，信息量极大，是研究北宋社会生活的第一手图像资料，全国独一无二。",
+   note:"宋代叙事壁画孤品，美术史必看"},
+
+  {id:9, day:2,name:"游仙寺",      dk:"wudai", dy:"五代", era:"五代后汉（943年）",          batch:"第五批（1996）",heat:"low", lat:35.7856,lng:112.9012,must:0,
+   feat:"五代毗卢殿保存完好，斗拱雄健有力，高平古建群重要组成。",
+   note:"高平古建群，可与开化寺连游"},
+
+  {id:10,day:2,name:"资圣寺",      dk:"song",  dy:"宋",   era:"宋金",                       batch:"第六批（2006）",heat:"low", lat:35.7634,lng:112.8890,must:0,
+   feat:"宋金木构，高平古建密集区重要一员，可与游仙寺合并参观。",
+   note:"高平古建连游"},
+
+  {id:11,day:3,name:"青莲寺",      dk:"tang",  dy:"唐",   era:"隋创建，唐宋木构",          batch:"第三批（1988）",heat:"mid", lat:35.4523,lng:112.8901,must:0,
+   feat:"古青莲寺存唐代遗构与唐碑，新青莲寺为宋代建筑，寺院临丹河峭壁而建，山水环境极佳。",
+   note:"有唐碑，山水环境绝佳"},
+
+  {id:12,day:3,name:"玉皇庙（府城）",dk:"song",dy:"宋",  era:"宋金元（11-14世纪）",        batch:"第三批（1988）",heat:"low", lat:35.5012,lng:112.8567,must:1,
+   feat:"元代二十八宿彩塑是镇庙之宝，二十八位神祇各具面貌服饰神器，造型奇绝生动，全国现存唯一完整二十八宿群像。",
+   note:"元代二十八宿彩塑，举国孤品"},
+
+  {id:13,day:3,name:"冶底岱庙",    dk:"song",  dy:"宋",   era:"北宋天仙圣母殿",            batch:"第五批（1996）",heat:"low", lat:35.3890,lng:112.7234,must:0,
+   feat:"宋代天仙圣母殿保存完整，建筑精巧，地处山野，游客极少，是难得的清净之地。",
+   note:"游客极少，清净幽深"},
+
+  {id:14,day:4,name:"郭峪古城",    dk:"ming",  dy:"明",   era:"明代（17世纪）",             batch:"第五批（1996）",heat:"mid", lat:35.3156,lng:112.4523,must:0,
+   feat:"明代城堡式村落，城墙完整，豫楼高耸，为活态聚落而非单体建筑，居民至今仍居其中，是了解明代北方乡绅社会的活化石。",
+   note:"完整明代城堡聚落，活态村落"},
+
+  {id:15,day:4,name:"湘峪古堡",    dk:"ming",  dy:"明",   era:"明崇祯年间（约1630年）",    batch:"第七批（2013）",heat:"mid", lat:35.4234,lng:112.3890,must:0,
+   feat:"三面环水一面靠山，城堡格局险要壮观，山水相映，建筑与自然融为一体，是华北保存最完整的明代城堡村落之一。",
+   note:"山水城堡，格局险峻壮美"},
+
+  {id:16,day:4,name:"窦庄古堡",    dk:"ming",  dy:"明",   era:"明代",                       batch:"第七批（2013）",heat:"low", lat:35.4567,lng:112.3234,must:0,
+   feat:"明代城堡式村落，与湘峪同类型，规模略小但保存完整，游客更少，可与湘峪连游。",
+   note:"可与湘峪合并，游客少"},
+
+  {id:17,day:4,name:"小会岭二仙庙",dk:"jin",   dy:"金",   era:"金代（12世纪）",             batch:"第五批（1996）",heat:"low", lat:35.6234,lng:112.6890,must:0,
+   feat:"金代木构，梁架精美规整，地处陵川山间，游客极少，是难得的金代遗构原生状态体验。",
+   note:"金构精品，山间幽径，人迹罕至"},
+
+  {id:18,day:5,name:"响堂山石窟",  dk:"bei",   dy:"北朝", era:"北齐（550-577年）",          batch:"第一批（1961）",heat:"mid", lat:36.5034,lng:114.2890,must:0,
+   feat:"北齐皇家石窟，分南北两处，造像风格圆润秀美，是北齐佛教艺术的代表，与北魏石窟风格迥异。",
+   note:"北齐石窟代表，一批国保"},
+
+  {id:19,day:5,name:"娲皇宫",      dk:"bei",   dy:"北朝", era:"北齐（550年始建）",          batch:"第五批（1996）",heat:"mid", lat:36.8923,lng:113.7234,must:0,
+   feat:"建筑群依山崖凌空而建，北齐摩崖刻经字迹清晰，四座楼阁贴壁悬挂于绝壁之上，视觉极为震撼。",
+   note:"悬崖建筑群+摩崖刻经，视觉震撼"},
+
+  {id:20,day:5,name:"修定寺塔",    dk:"tang",  dy:"唐",   era:"唐代（8世纪）",              batch:"第三批（1988）",heat:"low", lat:36.1234,lng:114.0567,must:1,
+   feat:"塔身全部以精美砖雕贴面，题材包含飞天力士佛像花卉，构图繁复华美，全国唯一此类唐代砖雕塔，中国最美唐塔。",
+   note:"砖雕唐塔孤品，举国无二"},
+
+  {id:21,day:5,name:"红旗渠",      dk:"jin2",  dy:"近现代",era:"1960年代",                  batch:"近现代文保",    heat:"hot", lat:36.0890,lng:113.8234,must:0,
+   feat:"太行绝壁上凿出的人工天河，全长1500公里，工程奇迹与人文精神并重，山水景观壮观，五一人流较多建议早去。",
+   note:"五一人多，建议早到"},
+
+  {id:22,day:6,name:"殷墟",        dk:"shang", dy:"商",   era:"商代（约公元前14-11世纪）", batch:"第一批（1961）",heat:"hot", lat:36.1245,lng:114.3223,must:1,
+   feat:"中国最早有文字记载的王都遗址，出土甲骨文，世界文化遗产，2023年新馆开放，展陈精彩。建议提前预约，留足3小时。",
+   note:"必去，五一须提前预约，留足3小时"},
+
+  {id:23,day:6,name:"天宁寺塔（文峰塔）",dk:"wudai",dy:"五代",era:"五代后周（952年）",    batch:"第三批（1988）",heat:"mid", lat:36.0978,lng:114.3456,must:0,
+   feat:"上大下小的倒梯形罕见塔型，五代砖塔，风格独特，位于安阳市区，参观殷墟后顺路可访。",
+   note:"倒梯形奇特造型，市区顺路"},
+
+  {id:101,day:1,name:"浊漳河谷",   dk:"nat",   dy:"自然", era:"—",batch:"—",heat:"low",lat:36.2500,lng:113.5800,must:0,
+   feat:"太行水乡，峡谷风光秀丽，平顺古建群沿浊漳河分布，驾车穿越河谷即是绝佳风景。",
+   note:"Day 1 沿途风景，无需绕路"},
+
+  {id:102,day:4,name:"王莽岭",     dk:"nat",   dy:"自然", era:"—",batch:"—",heat:"hot",lat:35.6012,lng:113.2234,must:0,
+   feat:"太行绝顶，视野开阔，云海壮观，秋季红叶最佳。五一人极多，建议清晨或傍晚前往。",
+   note:"五一人极多，酌情考虑"},
+
+  {id:103,day:5,name:"太行大峡谷", dk:"nat",   dy:"自然", era:"—",batch:"—",heat:"hot",lat:36.0234,lng:113.6890,must:0,
+   feat:"太行山最壮观峡谷段，红岩碧水，气势磅礴，与红旗渠相邻，可合并游览。",
+   note:"可与红旗渠合并，五一人多"}
 ];
 
-let map, markerLayer, currentDay = 'all', currentMarkers = [], searchInfoWindow = null;
-
-const DAY_CENTERS = {
-  'all': { lat:36.2, lng:113.3, zoom:8 },
-  1: { lat:36.2, lng:113.2, zoom:10 },
-  2: { lat:35.85, lng:112.95, zoom:10 },
-  3: { lat:35.45, lng:112.83, zoom:11 },
-  4: { lat:35.42, lng:112.45, zoom:10 },
-  5: { lat:36.35, lng:113.9, zoom:9 },
-  6: { lat:36.11, lng:114.34, zoom:13 },
+var DCTR = {
+  "all":{lat:36.2,lng:113.3,z:8},
+  1:{lat:36.2,lng:113.2,z:10},
+  2:{lat:35.85,lng:112.95,z:10},
+  3:{lat:35.45,lng:112.83,z:11},
+  4:{lat:35.42,lng:112.45,z:10},
+  5:{lat:36.35,lng:113.9,z:9},
+  6:{lat:36.11,lng:114.34,z:13}
 };
 
-function initMap() {
-  map = new TMap.Map('map', {
-    center: new TMap.LatLng(36.2, 113.3),
-    zoom: 8,
-  });
+var map, mlayer, curDay="all", siw=null;
+
+window.initMap = function(){
+  map = new TMap.Map("map",{center:new TMap.LatLng(36.2,113.3),zoom:8});
   renderMarkers();
-  renderList();
-}
+};
 
-function getMarkerGeometries(sites) {
-  return sites.map(s => ({
-    id: String(s.id),
-    styleId: 'style_' + s.id,
-    position: new TMap.LatLng(s.lat, s.lng),
-    properties: s
-  }));
-}
-
-function renderMarkers() {
-  if (markerLayer) { markerLayer.setMap(null); markerLayer = null; }
-  const filtered = currentDay === 'all' ? SITES : SITES.filter(s => s.day === currentDay);
-
-  document.getElementById('stat-count').textContent = filtered.length;
-
-  const styles = {};
-  filtered.forEach(s => {
-    const c = DYNASTY_COLORS[s.dynasty] || DYNASTY_COLORS['明'];
-    const heatBorder = s.heat === 'hot' ? '#c0392b' : s.heat === 'mid' ? '#e67e22' : '#27ae60';
-    styles['style_' + s.id] = new TMap.MarkerStyle({
-      width: s.must ? 28 : 22,
-      height: s.must ? 36 : 28,
-      anchor: { x: s.must ? 14 : 11, y: s.must ? 36 : 28 },
-      color: c.marker,
-      strokeColor: heatBorder,
-      strokeWidth: 2,
-    });
+function renderMarkers(){
+  if(mlayer){mlayer.setMap(null);mlayer=null;}
+  var sites = curDay==="all" ? SITES : SITES.filter(function(s){return s.day==curDay;});
+  document.getElementById("sc").textContent = sites.length;
+  var styles={};
+  sites.forEach(function(s){
+    var c=DCOL[s.dk]||DCOL["ming"];
+    var hc=s.heat==="hot"?"#c0392b":s.heat==="mid"?"#e67e22":"#27ae60";
+    styles["s"+s.id]=new TMap.MarkerStyle({width:s.must?28:22,height:s.must?36:28,anchor:{x:s.must?14:11,y:s.must?36:28},color:c.mk,strokeColor:hc,strokeWidth:2});
   });
-
-  markerLayer = new TMap.MultiMarker({
-    map,
-    styles,
-    geometries: filtered.map(s => ({
-      id: String(s.id),
-      styleId: 'style_' + s.id,
-      position: new TMap.LatLng(s.lat, s.lng),
-    }))
-  });
-
-  markerLayer.on('click', evt => {
-    const siteId = parseInt(evt.geometry.id);
-    const site = SITES.find(s => s.id === siteId);
-    if (site) showPanel(site);
+  mlayer=new TMap.MultiMarker({map:map,styles:styles,geometries:sites.map(function(s){
+    return {id:String(s.id),styleId:"s"+s.id,position:new TMap.LatLng(s.lat,s.lng)};
+  })});
+  mlayer.on("click",function(e){
+    var s=SITES.find(function(x){return String(x.id)===e.geometry.id;});
+    if(s) showPanel(s);
   });
 }
 
-function renderList() {
-  const filtered = currentDay === 'all' ? SITES : SITES.filter(s => s.day === currentDay);
-  const body = document.getElementById('list-body');
-  const title = document.getElementById('list-title');
-  title.textContent = (currentDay === 'all' ? '全部' : 'Day ' + currentDay) + '（' + filtered.length + '处）';
-  body.innerHTML = filtered.map(s => {
-    const c = DYNASTY_COLORS[s.dynasty] || DYNASTY_COLORS['明'];
-    const heatDot = s.heat === 'hot' ? '#c0392b' : s.heat === 'mid' ? '#e67e22' : '#27ae60';
-    return `<div class="list-item" onclick="showPanelById(${s.id})">
-      <div class="list-item-name">${s.must ? '⚡ ' : ''}${s.name}</div>
-      <div class="list-item-sub" style="display:flex;gap:8px;align-items:center;">
-        <span style="background:${c.bg};color:${c.text};padding:1px 6px;border-radius:8px;font-size:11px;">${s.dynasty}</span>
-        <span style="color:${heatDot};">● ${s.heat==='hot'?'人多':s.heat==='mid'?'一般':'清净'}</span>
-        <span>Day ${s.day}</span>
-      </div>
-    </div>`;
-  }).join('');
+function showPanel(s){
+  var c=DCOL[s.dk]||DCOL["ming"];
+  var hc=s.heat==="hot"?"#c0392b":s.heat==="mid"?"#e67e22":"#27ae60";
+  var ht=s.heat==="hot"?"人多（五一建议早到）":s.heat==="mid"?"一般":"清净（游客很少）";
+  document.getElementById("pname").textContent=(s.must?"⚡ ":"")+s.name;
+  document.getElementById("pdyn").innerHTML='<span class="bx" style="background:'+c.bg+';color:'+c.tx+'">'+s.dy+'</span>';
+  var bhtml='<div class="ir"><span class="il">年代</span><span class="iv">'+s.era+'</span></div>';
+  if(s.batch!=="—") bhtml+='<div class="ir"><span class="il">国保</span><span class="iv">'+s.batch+'</span></div>';
+  bhtml+='<div class="ir"><span class="il">行程</span><span class="iv">Day '+s.day+'</span></div>';
+  bhtml+='<div class="ir"><span class="il">人流</span><span class="iv" style="color:'+hc+'">'+ht+'</span></div>';
+  bhtml+='<div class="fb">'+s.feat+'</div>';
+  if(s.note) bhtml+='<div class="nb">'+s.note+'</div>';
+  bhtml+='<button class="navb" onclick="window.flyTo('+s.lat+','+s.lng+')">在地图定位此处</button>';
+  bhtml+='<button class="navb2" onclick="window.openNav('+s.lat+','+s.lng+',\''+s.name+'\')">腾讯地图导航</button>';
+  document.getElementById("pb").innerHTML=bhtml;
+  map.panTo(new TMap.LatLng(s.lat,s.lng));
 }
 
-function showPanelById(id) {
-  const site = SITES.find(s => s.id === id);
-  if (site) showPanel(site);
-}
+window.closePanel = function(){
+  document.getElementById("pname").textContent="点击地图标记";
+  document.getElementById("pdyn").innerHTML="";
+  document.getElementById("pb").innerHTML='<div id="es"><div class="bi">🗺️</div><div>点击地图上的标记</div><div>查看景点详情</div></div>';
+};
 
-function showPanel(site) {
-  const c = DYNASTY_COLORS[site.dynasty] || DYNASTY_COLORS['明'];
-  const heatColor = site.heat === 'hot' ? '#c0392b' : site.heat === 'mid' ? '#e67e22' : '#27ae60';
-  const heatText = site.heat === 'hot' ? '人多（五一建议早到）' : site.heat === 'mid' ? '一般' : '清净（游客很少）';
-
-  document.getElementById('panel-name').textContent = (site.must ? '⚡ ' : '') + site.name;
-  document.getElementById('panel-dynasty').innerHTML =
-    `<span style="background:${c.bg};color:${c.text};padding:2px 10px;border-radius:10px;font-size:12px;">${site.dynasty}</span>`;
-
-  document.getElementById('panel-body').innerHTML = `
-    <div class="info-section">
-      <div class="info-row"><span class="info-label">年代</span><span class="info-val">${site.era}</span></div>
-      ${site.batch !== '—' ? `<div class="info-row"><span class="info-label">国保</span><span class="info-val">${site.batch}</span></div>` : ''}
-      <div class="info-row"><span class="info-label">行程</span><span class="info-val">Day ${site.day}</span></div>
-      <div class="info-row"><span class="info-label">人流</span><span class="info-val" style="color:${heatColor};">${heatText}</span></div>
-      <div class="info-row"><span class="info-label">坐标</span><span class="info-val" style="font-size:11px;color:var(--ink3);">${site.lat}, ${site.lng}</span></div>
-    </div>
-    <div class="feature-box">${site.feature}</div>
-    ${site.note ? `<div class="note-box">${site.note}</div>` : ''}
-    <button class="nav-btn" onclick="flyTo(${site.lat},${site.lng})">在地图上定位此处</button>
-    <button class="nav-btn" style="margin-top:8px;background:var(--paper2);color:var(--ink);border:1px solid var(--paper3);" onclick="openNav(${site.lat},${site.lng},'${site.name}')">导航前往</button>
-  `;
-
-  map.panTo(new TMap.LatLng(site.lat, site.lng));
-}
-
-function flyTo(lat, lng) {
-  map.panTo(new TMap.LatLng(lat, lng));
-  map.setZoom(14);
-}
-
-function openNav(lat, lng, name) {
-  window.open(`https://apis.map.qq.com/uri/v1/routeplan?type=drive&to=${name}&tocoord=${lat},${lng}&policy=0&referer=TNMBZ-EXYLA-7HFKF-CDEEG-RT4B6-LWFDR`, '_blank');
-}
-
-function closePanel() {
-  document.getElementById('panel-body').innerHTML = `
-    <div id="empty-state"><div class="big">🗺</div><div>点击地图上的标记</div><div>查看景点详细信息</div></div>`;
-  document.getElementById('panel-name').textContent = '点击地图标记';
-  document.getElementById('panel-dynasty').innerHTML = '';
-}
-
-function filterDay(day, btn) {
-  currentDay = day;
-  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
+window.filterDay = function(day,btn){
+  curDay=day;
+  document.querySelectorAll(".db").forEach(function(b){b.classList.remove("on");});
+  if(btn) btn.classList.add("on");
   renderMarkers();
-  renderList();
-  const c = DAY_CENTERS[day] || DAY_CENTERS['all'];
-  map.panTo(new TMap.LatLng(c.lat, c.lng));
-  map.setZoom(c.zoom);
-  closePanel();
-}
+  var c=DCTR[day]||DCTR["all"];
+  map.panTo(new TMap.LatLng(c.lat,c.lng));
+  map.setZoom(c.z);
+  window.closePanel();
+};
 
-function toggleList() {
-  const panel = document.getElementById('list-panel');
-  const btn = document.getElementById('toggle-list-btn');
-  const isOpen = panel.classList.contains('open');
-  if (isOpen) { panel.classList.remove('open'); btn.classList.remove('active'); }
-  else { panel.classList.add('open'); btn.classList.add('active'); renderList(); }
-}
+window.flyTo = function(lat,lng){
+  map.panTo(new TMap.LatLng(lat,lng));
+  map.setZoom(15);
+};
 
-function searchPOI() {
-  const keyword = document.getElementById('poi-search').value.trim();
-  if (!keyword) return;
-  if (searchInfoWindow) { searchInfoWindow.close(); searchInfoWindow = null; }
+window.openNav = function(lat,lng,name){
+  window.open("https://apis.map.qq.com/uri/v1/routeplan?type=drive&to="+encodeURIComponent(name)+"&tocoord="+lat+","+lng+"&policy=0&referer=TNMBZ-EXYLA-7HFKF-CDEEG-RT4B6-LWFDR","_blank");
+};
 
-  const search = new TMap.service.Search({ pageSize: 5 });
+window.searchPOI = function(){
+  var kw=document.getElementById("pi").value.trim();
+  if(!kw) return;
+  if(siw){siw.close();siw=null;}
+  var search=new TMap.service.Search({pageSize:5});
   search.searchRectangle({
-    keyword,
-    bounds: new TMap.LatLngBounds(
-      new TMap.LatLng(34.0, 111.0),
-      new TMap.LatLng(38.0, 116.0)
-    )
-  }).then(res => {
-    if (res.data && res.data.length > 0) {
-      const p = res.data[0];
-      const pos = new TMap.LatLng(p.location.lat, p.location.lng);
-      map.panTo(pos);
-      map.setZoom(16);
-      searchInfoWindow = new TMap.InfoWindow({
-        map,
-        position: pos,
-        offset: { x: 0, y: -40 },
-        content: `<div style="background:#fff;padding:10px 14px;border-radius:8px;border:1px solid #e0dbd5;font-family:'Noto Sans SC',sans-serif;font-size:13px;color:#1a1612;max-width:220px;box-shadow:0 4px 12px rgba(0,0,0,0.12);"><b style="font-size:14px;">${p.title}</b><br><span style="color:#8a8480;font-size:12px;">${p.address || ''}</span>${p.tel ? `<br><span style="color:#2980b9;font-size:12px;">${p.tel}</span>` : ''}</div>`,
-        enableCustom: true
-      });
-      searchInfoWindow.open();
+    keyword:kw,
+    bounds:new TMap.LatLngBounds(new TMap.LatLng(34.0,111.0),new TMap.LatLng(38.0,116.0))
+  }).then(function(res){
+    if(res.data&&res.data.length>0){
+      var p=res.data[0];
+      var pos=new TMap.LatLng(p.location.lat,p.location.lng);
+      map.panTo(pos);map.setZoom(16);
+      siw=new TMap.InfoWindow({map:map,position:pos,offset:{x:0,y:-40},
+        content:'<div style="background:#fff;padding:10px 13px;border-radius:8px;border:1px solid #e0dbd5;font-size:13px;color:#1a1612;max-width:220px;box-shadow:0 3px 10px rgba(0,0,0,.1)"><b>'+p.title+'</b><br><span style="color:#8a8480;font-size:12px">'+(p.address||"")+'</span>'+(p.tel?'<br><span style="color:#2980b9;font-size:12px">'+p.tel+'</span>':"")+'</div>',
+        enableCustom:true});
+      siw.open();
     } else {
-      alert('未找到"' + keyword + '"，请尝试更具体的名称或所在城市');
+      alert("未找到["+kw+"]，请尝试更具体的名称");
     }
-  }).catch(err => {
-    console.error(err);
-    alert('搜索失败，请检查网络连接');
-  });
-}
+  }).catch(function(){alert("搜索失败，请检查网络");});
+};
 </script>
-
 <script src="https://map.qq.com/api/gljs?v=1.exp&key=TNMBZ-EXYLA-7HFKF-CDEEG-RT4B6-LWFDR&libraries=service&callback=initMap"></script>
 </body>
 </html>
